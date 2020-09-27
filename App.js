@@ -3,7 +3,31 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid  } from 'react-native';
 import {NativeModules} from 'react-native';
 var DirectSms = NativeModules.DirectSms;
+import SmsListener from './src/lib/SmsListener'
+
+SmsListener.addListener(message => {
+    console.log("Listener");
+    console.log(message);
+})
+
+async function requestReadSmsPermission() {
+    try {
+        await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_SMS,
+            {
+                title: "(...)",
+                message: "Why you're asking for..."
+            }
+        );
+    } catch (err) {}
+}
+
 export default class App extends React.Component<Props> {
+
+    componentDidMount() {
+        requestReadSmsPermission()
+    }
+
 // async function to call the Java native method
   async sendDirectSms() {
     try {
@@ -20,7 +44,7 @@ export default class App extends React.Component<Props> {
           },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        DirectSms.sendDirectSms('05428224767', 'deneme');
+        DirectSms.sendDirectSms('2023', 'deneme');
       } else {
         console.log('SMS permission denied');
       }
@@ -30,8 +54,8 @@ export default class App extends React.Component<Props> {
   }
   render() {
     return (
-        <View>
-          <TouchableOpacity onPress={() => this.sendDirectSms()}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => this.sendDirectSms()} style={{padding: 10, borderRadius: 5, backgroundColor: '#f0f0f0'}}>
             <Text>send SMS</Text>
           </TouchableOpacity>
         </View>
