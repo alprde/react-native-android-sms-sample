@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid  } from 'react-native';
 import {NativeModules} from 'react-native';
 var DirectSms = NativeModules.DirectSms;
-import SmsListener from './src/lib/SmsListener'
+import SmsListener from './lib/SmsListener'
 
 SmsListener.addListener(message => {
     console.log("Listener");
@@ -13,7 +13,7 @@ SmsListener.addListener(message => {
 async function requestReadSmsPermission() {
     try {
         await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_SMS,
+            PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
             {
                 title: "(...)",
                 message: "Why you're asking for..."
